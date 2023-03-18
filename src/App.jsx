@@ -1,35 +1,71 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import GenerateDoc from "./GenerateDoc";
+import {
+  DatePicker,
+  TimePicker,
+  Input,
+  InputNumber,
+  Descriptions,
+  Select,
+} from "antd";
+import { teachers, students } from "./data";
+import "./App.css"
+const fullWidth = {
+  width: "100%",
+};
 
-function App() {
-  const [count, setCount] = useState(0)
+const { TextArea } = Input;
 
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
-}
-
-export default App
+const App = () => (
+  <div>
+    <Descriptions title="Studio 课程记录表" size={"small"} column={4} bordered>
+      <Descriptions.Item label="课程名称" span={4}>
+        <Input />
+      </Descriptions.Item>
+      <Descriptions.Item label="上课日期">
+        <DatePicker style={fullWidth} bordered={false}/>
+      </Descriptions.Item>
+      <Descriptions.Item label="Check In">
+        <TimePicker style={fullWidth} format={'HH:mm'} bordered={false}/>
+      </Descriptions.Item>
+      <Descriptions.Item label="Check Out">
+        <TimePicker style={fullWidth} format={'HH:mm'} bordered={false}/>
+      </Descriptions.Item>
+      <Descriptions.Item label="确认课时数">
+        <InputNumber />
+      </Descriptions.Item>
+      <Descriptions.Item label="课程内容" span={4}>
+        <TextArea rows={20} />
+      </Descriptions.Item>
+      <Descriptions.Item label="学生签字" span={4}>
+        <Select
+          mode="multiple"
+          allowClear
+          style={fullWidth}
+          placeholder="选择学生"
+          options={students}
+        />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+      </Descriptions.Item>
+      <Descriptions.Item label="导师签字" span={4}>
+        <Select
+          showSearch
+          placeholder="选择导师"
+          optionFilterProp="children"
+          options={teachers}
+          filterOption={(input, option) =>
+            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+          }
+        />
+      </Descriptions.Item>
+    </Descriptions>
+    <br/>
+    <GenerateDoc />
+  </div>
+);
+export default App;
