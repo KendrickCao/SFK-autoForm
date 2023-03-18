@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import GenerateDoc from "./GenerateDoc";
+import React, { createRef, useState } from "react";
+import { useScreenshot } from 'use-react-screenshot'
+import Screenshot from "./Screenshot";
 import "./App.css";
 import sfkLogo from "./assets/SFKlogo.png";
 import {
@@ -15,30 +16,37 @@ import { teachers, students } from "./data";
 
 const labelStyle = {
   background: "white",
-  border: "2px solid black",
+  borderLeft: "2px solid black",
+  borderBottom: "2px solid black",
   textAlign: "center",
   fontWeight: 600,
   color: "black",
-};
+}
 const contentStyle = {
-  border: "2px solid black",
-};
+  fontWeight: 900,
+  borderLeft: "2px solid black",
+  borderBottom: "2px solid black",
+}
 const { TextArea } = Input;
 
 const App = () => {
-  const [teacherSign, setTecherSign] = useState();
-  const [studentSign, setStudemtSign] = useState();
+  const ref = createRef(null)
+  const [teacherSign, setTecherSign] = useState()
+  const [studentSign, setStudemtSign] = useState()
+  const [image, takeScreenshot] = useScreenshot()
+  const getImage = () => takeScreenshot(ref.current)
   const onChangeTeacher = (value) => {
-    console.log(`selected ${value}`);
-    setTecherSign(value);
-  };
+    console.log(`selected ${value}`)
+    setTecherSign(value)
+  }
   const onChangeStudent = (value) => {
-    console.log(`selected ${value}`);
-    setStudemtSign(value);
-  };
+    console.log(`selected ${value}`)
+    setStudemtSign(value)
+  }
 
   return (
-    <div>
+    <>
+    <div ref={ref} style={{padding: "51px"}}>
       <div className="form-title">
         <img src={sfkLogo} alt="logo" />
         <h2>Studio 课程记录表</h2>
@@ -86,7 +94,7 @@ const App = () => {
           </div>
         </Descriptions.Item>
       </Descriptions>
-      <br />
+      </div>
       <Space>
         <Select
           onChange={onChangeStudent}
@@ -106,9 +114,10 @@ const App = () => {
             (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
           }
         />
-        <GenerateDoc />
+        <Screenshot getImage={getImage} />
       </Space>
-    </div>
+      <img width={1300} src={image} />
+      </>
   );
 };
 export default App;

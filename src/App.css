@@ -1,5 +1,5 @@
 #root {
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -7,9 +7,8 @@
 
 .form-title{
   display: flex;
-  margin: 0 1px -1px 1px !important;
+  margin: 0 1.5px -1px 1.5px !important;
   border: 2px solid black !important;
-  border-bottom: 0 !important;
   align-items:center;
 }
 .form-title h2 {
@@ -23,4 +22,10 @@
 }
 .signature-container{
   display: flex;
+}
+.ant-descriptions-view {
+  border: 0;
+}
+.ant-descriptions-row:nth-last-child(1n){
+  border-right: 2px solid black !important;
 }
