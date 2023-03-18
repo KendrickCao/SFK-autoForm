@@ -1,7 +1,26 @@
 #root {
-  max-width: 1280px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
 }
 
+.form-title{
+  display: flex;
+  margin: 0 1px -1px 1px !important;
+  border: 2px solid black !important;
+  border-bottom: 0 !important;
+  align-items:center;
+}
+.form-title h2 {
+  width: 85%;
+}
+.form-title img{
+  width: 100px;
+}
+.teacher-sign{
+  width: 150px;
+}
+.signature-container{
+  display: flex;
+}

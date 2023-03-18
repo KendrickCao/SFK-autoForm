@@ -36,9 +36,8 @@ const handleDownload = ()=>{
     });
 }
 
-
 const GenerateDoc = () => (
-        <Button onClick={handleDownload} type="primary" icon={<DownloadOutlined />}>下载 Word 文件</Button>
+    <Button onClick={handleDownload} type="primary" icon={<DownloadOutlined />}>下载 Word 文件</Button>
 );
 export default GenerateDoc;
 
