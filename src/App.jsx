@@ -1,5 +1,5 @@
-import React, { createRef, useState } from "react";
-import { useScreenshot } from 'use-react-screenshot'
+import React, { useState } from "react";
+import html2canvas from "html2canvas";
 import Screenshot from "./Screenshot";
 import "./App.css";
 import sfkLogo from "./assets/SFKlogo.png";
@@ -11,6 +11,7 @@ import {
   Descriptions,
   Select,
   Space,
+  message,
 } from "antd";
 import { teachers, students } from "./data";
 
@@ -21,79 +22,110 @@ const labelStyle = {
   textAlign: "center",
   fontWeight: 600,
   color: "black",
-}
+};
 const contentStyle = {
   fontWeight: 900,
   borderLeft: "2px solid black",
   borderBottom: "2px solid black",
-}
+};
 const { TextArea } = Input;
 
 const App = () => {
-  const ref = createRef(null)
-  const [teacherSign, setTecherSign] = useState()
-  const [studentSign, setStudemtSign] = useState()
-  const [image, takeScreenshot] = useScreenshot()
-  const getImage = () => takeScreenshot(ref.current)
+  const [teacherSign, setTecherSign] = useState();
+  const [studentSign, setStudemtSign] = useState();
+  const [messageApi, contextHolder] = message.useMessage();
+  const showMessage = (content) => {
+    messageApi.open({
+      type: "success",
+      content: content,
+    });
+  };
+  const downloadImg = () => {
+    html2canvas(document.getElementById("studio-form")).then(function (canvas) {
+      const imgData = canvas.toDataURL();
+      const link = document.createElement("a");
+      link.download = "image.png";
+      link.href = imgData;
+      link.click();
+    });
+    showMessage("下载成功");
+  };
+  const copyImgToClipboard = () => {
+    html2canvas(document.getElementById("studio-form")).then(function (canvas) {
+      canvas.toBlob((blob) => {
+        const item = new ClipboardItem({ "image/png": blob });
+        navigator.clipboard.write([item]);
+      });
+    });
+    showMessage("图片已复制到剪贴板");
+  };
+
   const onChangeTeacher = (value) => {
-    console.log(`selected ${value}`)
-    setTecherSign(value)
-  }
+    console.log(`selected ${value}`);
+    setTecherSign(value);
+  };
   const onChangeStudent = (value) => {
-    console.log(`selected ${value}`)
-    setStudemtSign(value)
-  }
+    console.log(`selected ${value}`);
+    setStudemtSign(value);
+  };
 
   return (
     <>
-    <div ref={ref} style={{padding: "51px"}}>
-      <div className="form-title">
-        <img src={sfkLogo} alt="logo" />
-        <h2>Studio 课程记录表</h2>
-      </div>
-      <Descriptions
-        size={"small"}
-        labelStyle={labelStyle}
-        contentStyle={contentStyle}
-        column={4}
-        bordered
-      >
-        <Descriptions.Item label="课程名称" span={4}>
-          <Input bordered={false} />
-        </Descriptions.Item>
-        <Descriptions.Item label="上课日期">
-          <DatePicker bordered={false} />
-        </Descriptions.Item>
-        <Descriptions.Item label="Check In">
-          <TimePicker format={"HH:mm"} bordered={false} />
-        </Descriptions.Item>
-        <Descriptions.Item label="Check Out">
-          <TimePicker format={"HH:mm"} bordered={false} />
-        </Descriptions.Item>
-        <Descriptions.Item label="确认课时数">
-          <InputNumber bordered={false} />
-        </Descriptions.Item>
-        <Descriptions.Item label="课程内容" span={4}>
-          <TextArea rows={20} bordered={false} />
-        </Descriptions.Item>
-        <Descriptions.Item label="学生签字" span={4}>
-          <div className="signature-container">
-            {studentSign && studentSign.map((imgSrc, index) => (
-              <img
-                key={index}
-                src={imgSrc}
-                alt="teacher signature"
-                className="teacher-sign"
-              />
-            ))}
-          </div>
-        </Descriptions.Item>
-        <Descriptions.Item label="导师签字" span={4}>
-          <div className="signature-container">
-            {teacherSign && <img src={teacherSign} alt="teacher signature" className="teacher-sign"/>}
-          </div>
-        </Descriptions.Item>
-      </Descriptions>
+      <div id="studio-form" style={{ padding: "51px" }}>
+        <div className="form-title">
+          <img src={sfkLogo} alt="logo" />
+          <h2>Studio 课程记录表</h2>
+        </div>
+        <Descriptions
+          size={"small"}
+          labelStyle={labelStyle}
+          contentStyle={contentStyle}
+          column={4}
+          bordered
+        >
+          <Descriptions.Item label="课程名称" span={4}>
+            <Input bordered={false} />
+          </Descriptions.Item>
+          <Descriptions.Item label="上课日期">
+            <DatePicker bordered={false} />
+          </Descriptions.Item>
+          <Descriptions.Item label="Check In">
+            <TimePicker format={"HH:mm"} bordered={false} />
+          </Descriptions.Item>
+          <Descriptions.Item label="Check Out">
+            <TimePicker format={"HH:mm"} bordered={false} />
+          </Descriptions.Item>
+          <Descriptions.Item label="确认课时数">
+            <InputNumber bordered={false} />
+          </Descriptions.Item>
+          <Descriptions.Item label="课程内容" span={4}>
+            <TextArea rows={20} bordered={false} />
+          </Descriptions.Item>
+          <Descriptions.Item label="学生签字" span={4}>
+            <div className="signature-container">
+              {studentSign &&
+                studentSign.map((imgSrc, index) => (
+                  <img
+                    key={index}
+                    src={imgSrc}
+                    alt="student signature"
+                    className="teacher-sign"
+                  />
+                ))}
+            </div>
+          </Descriptions.Item>
+          <Descriptions.Item label="导师签字" span={4}>
+            <div className="signature-container">
+              {teacherSign && (
+                <img
+                  src={teacherSign}
+                  alt="teacher signature"
+                  className="teacher-sign"
+                />
+              )}
+            </div>
+          </Descriptions.Item>
+        </Descriptions>
       </div>
       <Space>
         <Select
@@ -114,10 +146,13 @@ const App = () => {
             (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
           }
         />
-        <Screenshot getImage={getImage} />
+        {contextHolder}
+        <Screenshot
+          downloadImg={downloadImg}
+          copyImgToClipboard={copyImgToClipboard}
+        />
       </Space>
-      <img width={1300} src={image} />
-      </>
+    </>
   );
 };
 export default App;

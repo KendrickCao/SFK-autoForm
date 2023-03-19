@@ -5,27 +5,27 @@
   text-align: center;
 }
 
-.form-title{
+.form-title {
   display: flex;
   margin: 0 1.5px -1px 1.5px !important;
   border: 2px solid black !important;
-  align-items:center;
+  align-items: center;
 }
 .form-title h2 {
   width: 85%;
 }
-.form-title img{
+.form-title img {
   width: 100px;
 }
-.teacher-sign{
+.teacher-sign {
   width: 150px;
 }
-.signature-container{
+.signature-container {
   display: flex;
 }
 .ant-descriptions-view {
   border: 0;
 }
-.ant-descriptions-row:nth-last-child(1n){
+.ant-descriptions-row:nth-last-child(1n) {
   border-right: 2px solid black !important;
 }

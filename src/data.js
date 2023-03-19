@@ -1,4 +1,4 @@
-import liushijia from "./assets/liushijia.png"
+import liushijia from "./assets/liushijia.png";
 export const teachers = [
   {
     value: liushijia,
