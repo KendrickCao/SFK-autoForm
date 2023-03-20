@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import html2canvas from "html2canvas";
+import dayjs from "dayjs";
 import Screenshot from "./Screenshot";
 import "./App.css";
 import sfkLogo from "./assets/SFKlogo.png";
@@ -29,7 +30,6 @@ const contentStyle = {
   borderBottom: "2px solid black",
 };
 const { TextArea } = Input;
-
 const App = () => {
   const [teacherSign, setTecherSign] = useState();
   const [studentSign, setStudemtSign] = useState();
@@ -61,11 +61,9 @@ const App = () => {
   };
 
   const onChangeTeacher = (value) => {
-    console.log(`selected ${value}`);
     setTecherSign(value);
   };
   const onChangeStudent = (value) => {
-    console.log(`selected ${value}`);
     setStudemtSign(value);
   };
 
@@ -87,10 +85,10 @@ const App = () => {
             <Input bordered={false} />
           </Descriptions.Item>
           <Descriptions.Item label="上课日期">
-            <DatePicker bordered={false} />
+            <DatePicker bordered={false} defaultValue={dayjs()} />
           </Descriptions.Item>
           <Descriptions.Item label="Check In">
-            <TimePicker format={"HH:mm"} bordered={false} />
+            <TimePicker format={"HH:mm"} bordered={false} defaultValue={dayjs('12:08', "HH:mm")}/>
           </Descriptions.Item>
           <Descriptions.Item label="Check Out">
             <TimePicker format={"HH:mm"} bordered={false} />
